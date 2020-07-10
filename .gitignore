@@ -1,0 +1,8 @@
+/build
+
+*.o
+*.exe
+*.o.tmp
+*.exe.stackdump
+serial
+usb
