@@ -14,6 +14,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 include_directories(
     "${PROJECT_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/include"
+    third_party/libserial/include
+    third_party/libserial/lib
     /usr/include/libusb-1.0
 )
 
@@ -33,5 +35,5 @@ add_executable(test_serial test/test_serial.cpp)
 add_executable(test_usb test/test_usb.cpp)
 
 # Link libraries.
-target_link_libraries(serial com_port usb-1.0)
-target_link_libraries(usb com_port usb-1.0)
+target_link_libraries(serial libserial)
+target_link_libraries(usb usb-1.0)
