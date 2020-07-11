@@ -1,1 +1,1 @@
-Viewing application for drone project.
+Test code for various linux communications interfaces.

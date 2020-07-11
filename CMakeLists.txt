@@ -10,23 +10,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Create compilation database for Sourcetrail.
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-# Detect OS.
-string(COMPARE EQUAL "${CMAKE_SYSTEM_NAME}" "Linux" is_linux)
-if(is_linux)
-    set(CXXOPTS "${CXXOPTS} -D OS_LINUX")
-	include_directories(/usr/include/libusb-1.0)
-
-    # Link libraries.
-    target_link_libraries(serial com_port usb-1.0)
-    target_link_libraries(usb com_port usb-1.0)
-elseif(CYGWIN)
-    set(CXXOPTS "${CXXOPTS} -D OS_CYGWIN")
-endif()
-
 # Add include directories
 include_directories(
     "${PROJECT_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/include"
+    /usr/include/libusb-1.0
 )
 
 # Add compiler/linker options.
@@ -43,3 +31,7 @@ add_library(usb OBJECT src/usb.cpp)
 # Add executables.
 add_executable(test_serial test/test_serial.cpp)
 add_executable(test_usb test/test_usb.cpp)
+
+# Link libraries.
+target_link_libraries(serial com_port usb-1.0)
+target_link_libraries(usb com_port usb-1.0)
