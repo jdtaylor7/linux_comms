@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION "3.14")
+cmake_minimum_required(VERSION 3.14)
 
 # Set project name.
 project(linux_comms)
@@ -21,7 +21,6 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/third_party/bounded_buffer/include"
     "/usr/include/libusb-1.0"
 )
-
 message(STATUS "include dirs:")
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 foreach(dir ${dirs})
@@ -44,5 +43,5 @@ add_executable(test_serial test/test_serial.cpp)
 add_executable(test_usb test/test_usb.cpp)
 
 # Link libraries.
-target_link_libraries(test_serial "${LIBSERIAL_LIB}")
-target_link_libraries(test_usb usb-1.0)
+target_link_libraries(test_serial serial "${LIBSERIAL_LIB}")
+target_link_libraries(test_usb usb usb-1.0)
