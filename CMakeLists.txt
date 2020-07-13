@@ -10,14 +10,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Create compilation database for Sourcetrail.
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
+# Find libraries.
+find_library(LIBSERIAL_LIB serial "${PROJECT_SOURCE_DIR}/third_party/libserial/lib")
+
 # Add include directories
 include_directories(
     "${PROJECT_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/include"
-    third_party/libserial/include
-    third_party/libserial/lib
-    /usr/include/libusb-1.0
+    "${PROJECT_SOURCE_DIR}/third_party/libserial/include"
+    "${PROJECT_SOURCE_DIR}/third_party/bounded_buffer/include"
+    "/usr/include/libusb-1.0"
 )
+
+message(STATUS "include dirs:")
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message(STATUS "    ${dir}")
+endforeach()
 
 # Add compiler/linker options.
 set(LINKOPTS "${LINKOPTS} -lpthread")
@@ -35,5 +44,5 @@ add_executable(test_serial test/test_serial.cpp)
 add_executable(test_usb test/test_usb.cpp)
 
 # Link libraries.
-target_link_libraries(serial libserial)
-target_link_libraries(usb usb-1.0)
+target_link_libraries(test_serial "${LIBSERIAL_LIB}")
+target_link_libraries(test_usb usb-1.0)
