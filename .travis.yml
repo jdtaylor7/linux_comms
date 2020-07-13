@@ -1,0 +1,19 @@
+language: cpp
+sudo: required
+dist: bionic
+os: linux
+compiler: g++
+
+notifications:
+    email: false
+
+before_install:
+  - echo $LANG
+  - echo $LC_ALL
+  - cmake --version
+
+script: ./build.sh
+
+env:
+  global:
+    - LC_ALL="en_US.UTF-8"
