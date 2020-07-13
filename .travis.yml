@@ -4,12 +4,6 @@ dist: bionic
 os: linux
 compiler: g++
 
-addons:
-  apt:
-    update: true
-    packages:
-      - cmake
-
 notifications:
     email: false
 
