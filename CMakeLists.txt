@@ -19,7 +19,6 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/third_party/libserial/include"
     "${PROJECT_SOURCE_DIR}/third_party/bounded_buffer/include"
-    "/usr/include/libusb-1.0"
 )
 message(STATUS "include dirs:")
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)

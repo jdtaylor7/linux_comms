@@ -7,6 +7,12 @@ compiler: g++
 notifications:
     email: false
 
+addons:
+  apt:
+    update: true
+    packages:
+      - libusb-1.0-0-dev
+
 before_install:
   - echo $LANG
   - echo $LC_ALL
