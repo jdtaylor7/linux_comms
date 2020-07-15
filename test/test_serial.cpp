@@ -12,8 +12,14 @@ int main()
     using namespace LibSerial;
 
     /*
-     * Pass buffer to serial device.
+     * Create serial device.
      */
+    SerialDeviceConfig cfg{
+        BaudRate::BAUD_9600,
+        CharacterSize::CHAR_SIZE_8,
+        FlowControl::FLOW_CONTROL_NONE,
+        Parity::PARITY_NONE,
+        StopBits::STOP_BITS_1};
     auto buf = std::make_shared<BoundedBuffer<char>>(1024);
     SerialDevice dev{buf};
 
@@ -25,20 +31,12 @@ int main()
     /*
      * Configure device.
      */
-    dev.config(
-        BaudRate::BAUD_9600,
-        CharacterSize::CHAR_SIZE_8,
-        FlowControl::FLOW_CONTROL_NONE,
-        Parity::PARITY_NONE,
-        StopBits::STOP_BITS_1
-    );
+    dev.config(cfg);
 
     /*
      * Read data from device into buffer.
      */
-    std::thread t1([&](){
-        dev.start_reading();
-    });
+    dev.start_reading();
 
     /*
      * Process data from buffer.

@@ -18,22 +18,17 @@ bool SerialDevice::open(const std::string& port_name)
         std::cerr << "Failed to open serial port: " << port_name << '\n';
         return false;
     }
+    this->port_open.store(true);
     return true;
 }
 
-void SerialDevice::config(
-    const LibSerial::BaudRate br,
-    const LibSerial::CharacterSize cs,
-    const LibSerial::FlowControl fc,
-    const LibSerial::Parity p,
-    const LibSerial::StopBits sb
-)
+void SerialDevice::config(SerialDeviceConfig& cfg)
 {
-    stream.SetBaudRate(br);
-    stream.SetCharacterSize(cs);
-    stream.SetFlowControl(fc);
-    stream.SetParity(p);
-    stream.SetStopBits(sb);
+    stream.SetBaudRate(cfg.br);
+    stream.SetCharacterSize(cfg.cs);
+    stream.SetFlowControl(cfg.fc);
+    stream.SetParity(cfg.py);
+    stream.SetStopBits(cfg.sb);
 }
 
 bool SerialDevice::is_data_available()
@@ -41,23 +36,37 @@ bool SerialDevice::is_data_available()
     return stream.IsDataAvailable();
 }
 
+bool SerialDevice::is_open() const
+{
+    return port_open.load();
+}
+
+bool SerialDevice::is_reading() const
+{
+    return keep_reading.load();
+}
+
 void SerialDevice::start_reading()
 {
     keep_reading.store(true);
 
-    while (1)
-    {
-        if (keep_reading.load() && is_data_available())
+    std::thread t1([&](){
+        while (keep_reading.load())
         {
-            using namespace std::chrono_literals;
+            if (is_data_available())
+            {
+                using namespace std::chrono_literals;
 
-            char recv_byte;
-            stream.get(recv_byte);
-            byte_buffer->force_push(recv_byte);
+                char recv_byte;
+                stream.get(recv_byte);
+                byte_buffer->force_push(recv_byte);
 
-            std::this_thread::sleep_for(1us);
+                std::this_thread::sleep_for(1us);
+            }
         }
-    }
+    });
+
+    t1.detach();
 }
 
 void SerialDevice::stop_reading()
