@@ -7,18 +7,19 @@ SerialDevice::SerialDevice(
 {
 }
 
-bool SerialDevice::open(const std::string& port_name)
+bool SerialDevice::open(const std::string& port)
 {
     try
     {
-        stream.Open(port_name.c_str());
+        stream.Open(port.c_str());
     }
     catch (const LibSerial::OpenFailed&)
     {
-        std::cerr << "Failed to open serial port: " << port_name << '\n';
+        std::cerr << "Failed to open serial port: " << port << '\n';
         return false;
     }
     this->port_open.store(true);
+    port_name = port;
     return true;
 }
 
@@ -29,11 +30,6 @@ void SerialDevice::config(const SerialDeviceConfig& cfg)
     stream.SetFlowControl(cfg.fc);
     stream.SetParity(cfg.py);
     stream.SetStopBits(cfg.sb);
-}
-
-bool SerialDevice::is_data_available()
-{
-    return stream.IsDataAvailable();
 }
 
 bool SerialDevice::is_open() const
@@ -53,7 +49,7 @@ void SerialDevice::start_reading()
     std::thread t1([&](){
         while (keep_reading.load())
         {
-            if (is_data_available())
+            if (stream.IsDataAvailable())
             {
                 using namespace std::chrono_literals;
 

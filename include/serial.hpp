@@ -35,7 +35,6 @@ public:
     bool open(const std::string&);
     void config(const SerialDeviceConfig&);
 
-    bool is_data_available();
     bool is_open() const;
     bool is_reading() const;
 
@@ -43,7 +42,7 @@ public:
     void stop_reading();
 private:
     LibSerial::SerialStream stream;
-    std::string serial_port;
+    std::string port_name{};
 
     std::shared_ptr<BoundedBuffer<char>> byte_buffer;
     std::atomic<bool> port_open = false;
