@@ -33,7 +33,7 @@ public:
     SerialDevice(std::shared_ptr<BoundedBuffer<char>>);
 
     bool open(const std::string&);
-    void config(SerialDeviceConfig&);
+    void config(const SerialDeviceConfig&);
 
     bool is_data_available();
     bool is_open() const;

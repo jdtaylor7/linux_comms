@@ -22,7 +22,7 @@ bool SerialDevice::open(const std::string& port_name)
     return true;
 }
 
-void SerialDevice::config(SerialDeviceConfig& cfg)
+void SerialDevice::config(const SerialDeviceConfig& cfg)
 {
     stream.SetBaudRate(cfg.br);
     stream.SetCharacterSize(cfg.cs);
@@ -65,7 +65,6 @@ void SerialDevice::start_reading()
             }
         }
     });
-
     t1.detach();
 }
 
